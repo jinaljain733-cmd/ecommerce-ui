@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Commerce UI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --surface: #f8f8f8;
+      --dark: #111111;
+      --accent: #e63946;
+      --text: #1a1a1a;
+      --muted: #888888;
+      --border: #e8e8e8;
+      --font: 'Plus Jakarta Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); overflow-x: hidden; }
+
+    /* TOP BAR */
+    .topbar { background: var(--dark); color: #fff; text-align: center; padding: .65rem 5%; font-size: .8rem; letter-spacing: .04em; }
+    .topbar a { color: #fff; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%; display: flex; align-items: center; gap: 2rem; height: 64px;
+    }
+    .nav-logo { font-size: 1.4rem; font-weight: 800; color: var(--dark); text-decoration: none; letter-spacing: -.02em; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-search { flex: 1; max-width: 460px; position: relative; }
+    .nav-search input {
+      width: 100%; padding: .65rem 1rem .65rem 2.8rem; border: 1.5px solid var(--border);
+      border-radius: 50px; font-family: var(--font); font-size: .9rem; outline: none;
+      background: var(--surface); transition: border-color .2s;
+    }
+    .nav-search input:focus { border-color: var(--dark); }
+    .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .9rem; }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; margin-left: auto; }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: .9rem; font-weight: 500; }
+    .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+    .nav-icon { color: var(--text); font-size: 1.1rem; cursor: pointer; position: relative; text-decoration: none; }
+    .nav-icon .badge {
+      position: absolute; top: -6px; right: -8px; background: var(--accent); color: #fff;
+      font-size: .65rem; width: 17px; height: 17px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+
+    /* CATEGORY NAV */
+    .cat-nav { border-bottom: 1px solid var(--border); padding: 0 5%; display: flex; gap: 2.5rem; overflow-x: auto; }
+    .cat-nav a {
+      color: var(--muted); text-decoration: none; font-size: .85rem; font-weight: 500;
+      padding: .85rem 0; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .2s;
+    }
+    .cat-nav a.active, .cat-nav a:hover { color: var(--text); border-color: var(--text); }
+
+    /* HERO BANNER */
+    .hero-banner {
+      margin: 1.5rem 5%; border-radius: 20px; overflow: hidden;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; position: relative;
+    }
+    .banner-content { padding: 3.5rem; display: flex; flex-direction: column; justify-content: center; }
+    .banner-tag { display: inline-block; background: rgba(230,57,70,.2); color: #ff8a8a; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 50px; margin-bottom: 1.5rem; }
+    .banner-content h1 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1rem; }
+    .banner-content p { color: rgba(255,255,255,.6); font-size: .95rem; line-height: 1.7; margin-bottom: 2rem; max-width: 360px; }
+    .banner-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-white { background: #fff; color: var(--dark); padding: .8rem 1.8rem; border-radius: 50px; font-weight: 700; font-size: .9rem; text-decoration: none; transition: opacity .2s; }
+    .btn-white:hover { opacity: .9; }
+    .btn-ghost-white { border: 1.5px solid rgba(255,255,255,.3); color: #fff; padding: .8rem 1.8rem; border-radius: 50px; font-weight: 600; font-size: .9rem; text-decoration: none; transition: border-color .2s; }
+    .btn-ghost-white:hover { border-color: #fff; }
+    .banner-visual { display: flex; align-items: center; justify-content: center; padding: 2rem; color: rgba(255,255,255,.3); font-size: .9rem; }
+    .banner-visual-box { width: 100%; max-width: 320px; aspect-ratio: 1; background: rgba(255,255,255,.08); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.1); }
+
+    /* PROMO CARDS */
+    .promos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 5%; }
+    .promo-card { border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; }
+    .promo-card:nth-child(1) { background: #fff3e0; }
+    .promo-card:nth-child(2) { background: #e8f5e9; }
+    .promo-card:nth-child(3) { background: #ede7f6; }
+    .promo-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .promo-card p { font-size: .8rem; color: var(--muted); }
+    .promo-link { font-size: .8rem; font-weight: 700; color: var(--dark); text-decoration: none; margin-top: 1rem; display: inline-block; }
+
+    /* SECTION HEADERS */
+    .section-wrap { padding: 3rem 5%; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; }
+    .section-header h2 { font-size: 1.4rem; font-weight: 800; }
+    .section-header a { color: var(--accent); font-size: .85rem; font-weight: 600; text-decoration: none; }
+
+    /* PRODUCT GRID */
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+    .product-card { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: box-shadow .2s; background: var(--bg); }
+    .product-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.08); }
+    .product-img { aspect-ratio: 1; background: var(--surface); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: .85rem; position: relative; }
+    .product-badge { position: absolute; top: .7rem; left: .7rem; background: var(--accent); color: #fff; font-size: .7rem; font-weight: 700; padding: .25rem .6rem; border-radius: 50px; }
+    .wishlist-btn { position: absolute; top: .7rem; right: .7rem; background: #fff; border: 1px solid var(--border); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: .9rem; cursor: pointer; transition: background .2s; }
+    .wishlist-btn:hover { background: var(--surface); }
+    .product-info { padding: 1rem; }
+    .product-brand { color: var(--muted); font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+    .product-name { font-size: .9rem; font-weight: 600; margin-bottom: .5rem; line-height: 1.4; }
+    .product-rating { display: flex; align-items: center; gap: .4rem; margin-bottom: .6rem; }
+    .stars { color: #f5a623; font-size: .8rem; }
+    .rating-count { color: var(--muted); font-size: .75rem; }
+    .product-price { display: flex; align-items: center; gap: .6rem; margin-bottom: .8rem; }
+    .price-current { font-size: 1rem; font-weight: 800; color: var(--text); }
+    .price-old { font-size: .85rem; color: var(--muted); text-decoration: line-through; }
+    .price-discount { font-size: .75rem; font-weight: 700; color: var(--accent); }
+    .add-to-cart {
+      width: 100%; padding: .65rem; background: var(--dark); color: #fff; border: none;
+      border-radius: 8px; font-family: var(--font); font-size: .85rem; font-weight: 600;
+      cursor: pointer; transition: background .2s;
+    }
+    .add-to-cart:hover { background: var(--accent); }
+
+    /* CATEGORIES */
+    .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+    .category-card { border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; text-align: center; text-decoration: none; color: var(--text); transition: all .2s; }
+    .category-card:hover { border-color: var(--dark); background: var(--surface); }
+    .cat-icon { font-size: 2rem; margin-bottom: .6rem; }
+    .cat-name { font-size: .85rem; font-weight: 600; }
+    .cat-count { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+
+    /* NEWSLETTER */
+    .newsletter { background: var(--dark); margin: 1.5rem 5%; border-radius: 20px; padding: 3.5rem; display: flex; gap: 3rem; align-items: center; }
+    .newsletter-text { flex: 1; }
+    .newsletter-text h2 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: .6rem; }
+    .newsletter-text p { color: rgba(255,255,255,.5); font-size: .9rem; }
+    .newsletter-form { flex: 1; display: flex; gap: .8rem; }
+    .newsletter-form input {
+      flex: 1; padding: .85rem 1.2rem; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+      color: #fff; font-family: var(--font); font-size: .9rem; border-radius: 8px; outline: none;
+    }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,.3); }
+    .newsletter-form button {
+      background: var(--accent); color: #fff; padding: .85rem 1.6rem; border: none;
+      border-radius: 8px; font-family: var(--font); font-weight: 700; font-size: .9rem; cursor: pointer; transition: opacity .2s; white-space: nowrap;
+    }
+    .newsletter-form button:hover { opacity: .9; }
+
+    /* FOOTER */
+    footer { padding: 4rem 5% 2rem; border-top: 1px solid var(--border); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand .nav-logo { display: block; margin-bottom: 1rem; }
+    .footer-brand p { color: var(--muted); font-size: .85rem; line-height: 1.7; max-width: 240px; margin-bottom: 1.2rem; }
+    .payment-badges { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .payment-badge { background: var(--surface); border: 1px solid var(--border); padding: .3rem .7rem; border-radius: 6px; font-size: .7rem; font-weight: 700; color: var(--muted); }
+    .footer-col h4 { font-weight: 700; font-size: .9rem; margin-bottom: 1.2rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: .65rem; }
+    .footer-col a { color: var(--muted); text-decoration: none; font-size: .85rem; transition: color .2s; }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-bottom p { color: var(--muted); font-size: .8rem; }
+
+    @media (max-width: 900px) {
+      .hero-banner { grid-template-columns: 1fr; }
+      .banner-visual { display: none; }
+      .promos { grid-template-columns: 1fr; }
+      .newsletter { flex-direction: column; }
+      .newsletter-form { width: 100%; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">🚚 Free shipping on orders over $50 · <a href="#">Shop Now</a></div>
+
+  <nav>
+    <a href="#" class="nav-logo">shop<span>•</span></a>
+    <div class="nav-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search products, brands..."/>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Men</a></li>
+      <li><a href="#">Women</a></li>
+      <li><a href="#">Sale</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="#" class="nav-icon">♡</a>
+      <a href="#" class="nav-icon">👤</a>
+      <a href="#" class="nav-icon">🛒<span class="badge">3</span></a>
+    </div>
+  </nav>
+
+  <div class="cat-nav">
+    <a href="#" class="active">All</a>
+    <a href="#">New Arrivals</a>
+    <a href="#">Electronics</a>
+    <a href="#">Fashion</a>
+    <a href="#">Home & Living</a>
+    <a href="#">Beauty</a>
+    <a href="#">Sports</a>
+    <a href="#">Books</a>
+    <a href="#">Toys</a>
+  </div>
+
+  <div class="hero-banner">
+    <div class="banner-content">
+      <span class="banner-tag">Summer Sale — Up to 60% OFF</span>
+      <h1>Discover the Latest Trends</h1>
+      <p>Thousands of products, unbeatable prices, and fast delivery right to your door.</p>
+      <div class="banner-btns">
+        <a href="#" class="btn-white">Shop Now</a>
+        <a href="#" class="btn-ghost-white">View Deals</a>
+      </div>
+    </div>
+    <div class="banner-visual">
+      <div class="banner-visual-box">Product Hero Image</div>
+    </div>
+  </div>
+
+  <div class="promos">
+    <div class="promo-card"><div><h3>Free Returns</h3><p>30-day hassle-free returns on everything</p></div><a href="#" class="promo-link">Learn more →</a></div>
+    <div class="promo-card"><div><h3>Today's Flash Sale</h3><p>Up to 70% off selected items — ends midnight</p></div><a href="#" class="promo-link">Shop deals →</a></div>
+    <div class="promo-card"><div><h3>Earn Rewards</h3><p>Get points on every purchase you make</p></div><a href="#" class="promo-link">Join now →</a></div>
+  </div>
+
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>Shop by Category</h2>
+      <a href="#">All categories →</a>
+    </div>
+    <div class="categories-grid">
+      <a href="#" class="category-card"><div class="cat-icon">📱</div><div class="cat-name">Electronics</div><div class="cat-count">1,240 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">👗</div><div class="cat-name">Fashion</div><div class="cat-count">3,820 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">🏠</div><div class="cat-name">Home</div><div class="cat-count">980 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">💄</div><div class="cat-name">Beauty</div><div class="cat-count">640 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">⚽</div><div class="cat-name">Sports</div><div class="cat-count">510 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">📚</div><div class="cat-name">Books</div><div class="cat-count">2,100 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">🎮</div><div class="cat-name">Gaming</div><div class="cat-count">380 items</div></a>
+      <a href="#" class="category-card"><div class="cat-icon">🍳</div><div class="cat-name">Kitchen</div><div class="cat-count">750 items</div></a>
+    </div>
+  </div>
+
+  <div class="section-wrap">
+    <div class="section-header">
+      <h2>🔥 Trending Now</h2>
+      <a href="#">See all →</a>
+    </div>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-img"><span class="product-badge">-30%</span><div class="wishlist-btn">♡</div>Product Image</div>
+        <div class="product-info">
+          <div class="product-brand">Apple</div>
+          <div class="product-name">Wireless Noise-Cancelling Headphones Pro</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(2.4k)</span></div>
+          <div class="product-price"><span class="price-current">$279</span><span class="price-old">$399</span><span class="price-discount">-30%</span></div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-badge">New</span><div class="wishlist-btn">♡</div>Product Image</div>
+        <div class="product-info">
+          <div class="product-brand">Nike</div>
+          <div class="product-name">Air Max 270 Running Shoes — Limited Edition</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(874)</span></div>
+          <div class="product-price"><span class="price-current">$130</span></div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><div class="wishlist-btn">♡</div>Product Image</div>
+        <div class="product-info">
+          <div class="product-brand">Sony</div>
+          <div class="product-name">4K Ultra HD Smart TV 55"</div>
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(1.1k)</span></div>
+          <div class="product-price"><span class="price-current">$799</span><span class="price-old">$999</span><span class="price-discount">-20%</span></div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img"><span class="product-badge">-45%</span><div class="wishlist-btn">♡</div>Product Image</div>
+        <div class="product-info">
+          <div class="product-brand">Levi's</div>
+          <div class="product-name">Classic Slim Fit Denim Jeans</div>
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(426)</span></div>
+          <div class="product-price"><span class="price-current">$44</span><span class="price-old">$80</span><span class="price-discount">-45%</span></div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="newsletter">
+    <div class="newsletter-text">
+      <h2>Get 10% off your first order</h2>
+      <p>Subscribe to our newsletter for exclusive deals, new arrivals, and style tips.</p>
+    </div>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Enter your email address"/>
+      <button>Subscribe</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">shop<span style="color:var(--accent)">•</span></a>
+        <p>Your one-stop shop for everything you need, delivered fast and hassle-free.</p>
+        <div class="payment-badges">
+          <span class="payment-badge">VISA</span>
+          <span class="payment-badge">MC</span>
+          <span class="payment-badge">PayPal</span>
+          <span class="payment-badge">UPI</span>
+          <span class="payment-badge">GPay</span>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Blog</a></li></ul></div>
+      <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Track Order</a></li><li><a href="#">Returns</a></li><li><a href="#">Contact Us</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Cookie Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">Twitter</a></li><li><a href="#">Facebook</a></li><li><a href="#">YouTube</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Shop. All rights reserved.</p>
+      <p>Made with ♥ for great shoppers everywhere</p>
+    </div>
+  </footer>
+
+</body>
+</html>
